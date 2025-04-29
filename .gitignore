@@ -50,3 +50,6 @@ app.*.map.json
 .env.production
 .env.test
 .env.staging
+
+# Versions
+versions/
