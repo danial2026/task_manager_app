@@ -14,9 +14,13 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         createdAt: DateTime.now(),
       );
+      // emit(state.copyWith(
+      //   status: AuthStatus.authenticated,
+      //   user: user,
+      // ));
       emit(state.copyWith(
-        status: AuthStatus.authenticated,
-        user: user,
+        status: AuthStatus.error,
+        errorMessage: "Not implemented",
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -34,9 +38,13 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         createdAt: DateTime.now(),
       );
+      // emit(state.copyWith(
+      //   status: AuthStatus.authenticated,
+      //   user: user,
+      // ));
       emit(state.copyWith(
-        status: AuthStatus.authenticated,
-        user: user,
+        status: AuthStatus.error,
+        errorMessage: "Not implemented",
       ));
     } catch (e) {
       emit(state.copyWith(
@@ -44,10 +52,6 @@ class AuthCubit extends Cubit<AuthState> {
         errorMessage: e.toString(),
       ));
     }
-  }
-
-  void signOut() {
-    emit(const AuthState(status: AuthStatus.unauthenticated));
   }
 
   Future<void> signInWithGoogle() async {

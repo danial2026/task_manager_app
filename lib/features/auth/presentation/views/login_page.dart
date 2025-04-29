@@ -3,6 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:task_manager_app/shared/utils/platform_utils.dart';
+import 'package:task_manager_app/shared/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 import '../bloc/auth_cubit.dart';
 import '../bloc/auth_state.dart';
 import '../../../../core/constants/app_constants.dart';
@@ -63,18 +65,10 @@ class _LoginPageState extends State<LoginPage> {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state.status == AuthStatus.error) {
-          showPlatformDialog(
+          showToastification(
             context: context,
-            builder: (_) => PlatformAlertDialog(
-              title: const Text('Error'),
-              content: Text(state.errorMessage ?? 'An error occurred'),
-              actions: <Widget>[
-                PlatformDialogAction(
-                  child: const Text('OK'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
+            message: state.errorMessage ?? 'An error occurred',
+            type: ToastificationType.error,
           );
         } else if (state.status == AuthStatus.authenticated) {
           Navigator.pushReplacementNamed(context, '/tasks');

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -90,8 +91,10 @@ class ProfileCubit extends Cubit<ProfileState> {
   Future<void> signOut() async {
     emit(state.copyWith(status: ProfileStatus.loading));
     try {
+      // TODO: Implement sign out for FirebaseFirestore
       await FirebaseAuth.instance.signOut();
       await GoogleSignIn().signOut();
+
       emit(const ProfileState(
         status: ProfileStatus.signedOut,
       ));
