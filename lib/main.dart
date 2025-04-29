@@ -21,7 +21,5 @@ void main() {
 }
 
 Future<void> initServices() async {
-  if (Firebase.apps.isEmpty) {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp();
 }

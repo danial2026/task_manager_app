@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager_app/shared/utils/platform_utils.dart';
-import '../../domain/models/task.dart';
+import '../../domain/task.dart';
 import '../bloc/tasks_cubit.dart';
 import '../utils/time_utils.dart';
 
@@ -38,8 +38,8 @@ class TaskItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w400,
-                      color: task.isCompleted ? Colors.grey : Colors.black,
-                      decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+                      color: task.status == TaskStatus.completed ? Colors.grey : Colors.black,
+                      decoration: task.status == TaskStatus.completed ? TextDecoration.lineThrough : null,
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -48,16 +48,47 @@ class TaskItem extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.grey,
-                      decoration: task.isCompleted ? TextDecoration.lineThrough : null,
+                      decoration: task.status == TaskStatus.completed ? TextDecoration.lineThrough : null,
                     ),
                   ),
                 ],
               ),
             ),
+            // TODO: implement edit task form
+            // _editIcon(
+            //   context: context,
+            //   onEditButtonPressed: () {
+            //   },
+            // ),
           ],
         ),
       ),
     );
+  }
+
+  Widget _editIcon({required BuildContext context, required void Function() onEditButtonPressed}) {
+    final bool isIOS = isCupertinoCustom(context);
+
+    if (!isIOS) {
+      return CupertinoButton(
+        padding: EdgeInsets.zero,
+        minSize: 0,
+        onPressed: onEditButtonPressed,
+        child: const Icon(
+          CupertinoIcons.pencil,
+          size: 20,
+          color: CupertinoColors.systemGrey,
+        ),
+      );
+    } else {
+      return IconButton(
+        icon: const Icon(Icons.edit, size: 20),
+        color: Colors.grey,
+        padding: EdgeInsets.zero,
+        constraints: const BoxConstraints(),
+        onPressed: onEditButtonPressed,
+      );
+    }
   }
 
   Widget _buildCheckbox(BuildContext context) {
@@ -68,11 +99,11 @@ class TaskItem extends StatelessWidget {
         width: 24,
         height: 24,
         decoration: BoxDecoration(
-          border: task.isCompleted ? null : Border.all(color: Colors.grey.shade400),
+          border: task.status == TaskStatus.completed ? null : Border.all(color: Colors.grey.shade400),
           borderRadius: BorderRadius.circular(4),
-          color: task.isCompleted ? Colors.black : Colors.transparent,
+          color: task.status == TaskStatus.completed ? Colors.black : Colors.transparent,
         ),
-        child: task.isCompleted
+        child: task.status == TaskStatus.completed
             ? const Icon(
                 CupertinoIcons.check_mark,
                 size: 16,
@@ -85,7 +116,7 @@ class TaskItem extends StatelessWidget {
         width: 24,
         height: 24,
         child: Checkbox(
-          value: task.isCompleted,
+          value: task.status == TaskStatus.completed,
           activeColor: Colors.black,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),

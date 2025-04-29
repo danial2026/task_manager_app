@@ -1,12 +1,18 @@
 import 'package:equatable/equatable.dart';
 
+enum TaskStatus {
+  pending,
+  completed,
+  cancelled,
+}
+
 class Task extends Equatable {
   final String id;
   final String title;
   final String description;
   final DateTime createdAt;
   final DateTime? dueDate;
-  final bool isCompleted;
+  final TaskStatus status;
 
   const Task({
     required this.id,
@@ -14,7 +20,7 @@ class Task extends Equatable {
     required this.description,
     required this.createdAt,
     this.dueDate,
-    this.isCompleted = false,
+    this.status = TaskStatus.pending,
   });
 
   Task copyWith({
@@ -23,7 +29,7 @@ class Task extends Equatable {
     String? description,
     DateTime? createdAt,
     DateTime? dueDate,
-    bool? isCompleted,
+    TaskStatus? status,
   }) =>
       Task(
         id: id ?? this.id,
@@ -31,7 +37,7 @@ class Task extends Equatable {
         description: description ?? this.description,
         createdAt: createdAt ?? this.createdAt,
         dueDate: dueDate ?? this.dueDate,
-        isCompleted: isCompleted ?? this.isCompleted,
+        status: status ?? this.status,
       );
 
   factory Task.fromJson(Map<String, dynamic> json) => Task(
@@ -39,8 +45,8 @@ class Task extends Equatable {
         title: json['title'] as String,
         description: json['description'] as String,
         createdAt: DateTime.parse(json['created_at'] as String),
-        dueDate: json['due_date'] != null ? DateTime.parse(json['due_date'] as String) : null,
-        isCompleted: json['is_completed'] as bool? ?? false,
+        dueDate: json['due_date'] != null ? DateTime.tryParse(json['due_date'] as String) : null,
+        status: TaskStatus.values.byName(json['status'] as String),
       );
 
   Map<String, dynamic> toJson() => {
@@ -49,9 +55,9 @@ class Task extends Equatable {
         'description': description,
         'created_at': createdAt.toIso8601String(),
         'due_date': dueDate?.toIso8601String(),
-        'is_completed': isCompleted,
+        'status': status.name,
       };
 
   @override
-  List<Object?> get props => [id, title, description, createdAt, dueDate, isCompleted];
+  List<Object?> get props => [id, title, description, createdAt, dueDate, status];
 }

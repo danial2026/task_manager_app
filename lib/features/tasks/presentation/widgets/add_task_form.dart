@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager_app/shared/utils/platform_utils.dart';
+import 'package:task_manager_app/shared/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 import '../bloc/tasks_cubit.dart';
 import '../utils/time_utils.dart';
 import 'time_picker_row.dart';
@@ -35,11 +37,19 @@ class _AddTaskFormState extends State<AddTaskForm> {
   }
 
   void _submitTask() {
-    if (nameController.text.isEmpty) return;
+    if (nameController.text.isEmpty) {
+      showToastification(
+        context: context,
+        message: "Name field is required",
+        type: ToastificationType.error,
+        autoCloseDuration: const Duration(seconds: 2),
+      );
+      return;
+    }
 
     // Calculate time for the task
     final now = DateTime.now();
-    DateTime taskDateTime;
+    DateTime? taskDateTime;
 
     // Convert to 24-hour format
     int taskHour = hour;
@@ -51,14 +61,12 @@ class _AddTaskFormState extends State<AddTaskForm> {
 
     if (isToday) {
       taskDateTime = DateTime(now.year, now.month, now.day, taskHour, minute);
-    } else {
-      taskDateTime = DateTime(now.year, now.month, now.day + 1, taskHour, minute);
     }
 
     context.read<TasksCubit>().addTask(
           nameController.text,
           '',
-          taskDateTime,
+          dueDate: taskDateTime,
         );
     widget.onClose();
   }
@@ -97,21 +105,24 @@ class _AddTaskFormState extends State<AddTaskForm> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
           // Hour selector
-          Row(
-            children: [
-              _subHeader('Hour'),
-              TimePickerRow(
-                hour: hour,
-                minute: minute,
-                isAM: isAM,
-                onHourChanged: (h) => setState(() => hour = h),
-                onMinuteChanged: (m) => setState(() => minute = m),
-                onAMPMChanged: (am) => setState(() => isAM = am),
-              ),
-            ],
-          ),
+          if (isToday) ...[
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                _subHeader('Hour'),
+                TimePickerRow(
+                  hour: hour,
+                  minute: minute,
+                  isAM: isAM,
+                  onHourChanged: (h) => setState(() => hour = h),
+                  onMinuteChanged: (m) => setState(() => minute = m),
+                  onAMPMChanged: (am) => setState(() => isAM = am),
+                ),
+              ],
+            ),
+          ],
+
           const SizedBox(height: 12),
           // Today toggle
           Row(
@@ -184,21 +195,23 @@ class _AddTaskFormState extends State<AddTaskForm> {
               ),
             ],
           ),
-          const SizedBox(height: 24),
           // Hour selector
-          Row(
-            children: [
-              _subHeader('Hour'),
-              TimePickerRow(
-                hour: hour,
-                minute: minute,
-                isAM: isAM,
-                onHourChanged: (h) => setState(() => hour = h),
-                onMinuteChanged: (m) => setState(() => minute = m),
-                onAMPMChanged: (am) => setState(() => isAM = am),
-              ),
-            ],
-          ),
+          if (isToday) ...[
+            const SizedBox(height: 24),
+            Row(
+              children: [
+                _subHeader('Hour'),
+                TimePickerRow(
+                  hour: hour,
+                  minute: minute,
+                  isAM: isAM,
+                  onHourChanged: (h) => setState(() => hour = h),
+                  onMinuteChanged: (m) => setState(() => minute = m),
+                  onAMPMChanged: (am) => setState(() => isAM = am),
+                ),
+              ],
+            ),
+          ],
           const SizedBox(height: 12),
           // Today toggle
           Row(

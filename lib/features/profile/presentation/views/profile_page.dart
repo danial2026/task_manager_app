@@ -53,6 +53,13 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }
 
+          if (state.status == ProfileStatus.signedOut) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacementNamed(context, '/login');
+            });
+            return const Center(child: Text('Signed out'));
+          }
+
           final profile = state.profile;
           if (profile == null) {
             return const Center(child: Text('No profile data available'));
@@ -104,7 +111,6 @@ class _ProfilePageState extends State<ProfilePage> {
                 ElevatedButton(
                   onPressed: () {
                     context.read<ProfileCubit>().signOut();
-                    Navigator.pushReplacementNamed(context, '/login');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,

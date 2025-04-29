@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_platform_widgets/flutter_platform_widgets.dart';
 import 'package:task_manager_app/shared/utils/platform_utils.dart';
+import 'package:task_manager_app/shared/widgets/custom_toastification.dart';
+import 'package:toastification/toastification.dart';
 import '../bloc/tasks_cubit.dart';
 import '../widgets/task_item.dart';
 import '../widgets/add_task_form.dart';
@@ -165,13 +167,12 @@ class _TasksPageState extends State<TasksPage> {
       ),
       body: BlocBuilder<TasksCubit, TasksState>(
         builder: (context, state) {
-          if (state.status == TasksStatus.loading) {
-            return Center(child: PlatformCircularProgressIndicator());
-          }
-
           if (state.status == TasksStatus.error) {
-            return Center(
-              child: Text(state.errorMessage ?? 'An error occurred'),
+            showToastification(
+              context: context,
+              message: state.errorMessage ?? 'An error occurred',
+              type: ToastificationType.error,
+              autoCloseDuration: const Duration(seconds: 2),
             );
           }
 
@@ -179,60 +180,71 @@ class _TasksPageState extends State<TasksPage> {
           final todayTasks = TaskFilters.getTodayTasks(state.tasks, _hideCompleted);
           final tomorrowTasks = TaskFilters.getTomorrowTasks(state.tasks, _hideCompleted);
 
-          return ListView(
-            padding: UiConstants.horizontalPadding,
+          return Stack(
             children: [
-              const SizedBox(height: 12),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              ListView(
+                padding: UiConstants.horizontalPadding,
                 children: [
+                  const SizedBox(height: 12),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Today',
+                        style: UiConstants.headerStyle,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _hideCompleted = !_hideCompleted;
+                          });
+                        },
+                        child: Text(
+                          _hideCompleted ? 'Show completed' : 'Hide completed',
+                          style: UiConstants.buttonTextStyle.copyWith(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  if (todayTasks.isNotEmpty) ...[
+                    ...todayTasks.map((task) => TaskItem(
+                          task: task,
+                          isToday: true,
+                        )),
+                  ] else ...[
+                    const SizedBox(height: 20),
+                    const Center(child: Text('No tasks for today')),
+                  ],
+
+                  const SizedBox(height: 32),
+
                   const Text(
-                    'Today',
+                    'Tomorrow',
                     style: UiConstants.headerStyle,
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _hideCompleted = !_hideCompleted;
-                      });
-                    },
-                    child: Text(
-                      'Hide completed',
-                      style: UiConstants.buttonTextStyle.copyWith(color: Colors.blue),
-                    ),
-                  ),
+
+                  if (tomorrowTasks.isNotEmpty) ...[
+                    ...tomorrowTasks.map((task) => TaskItem(
+                          task: task,
+                          isToday: false,
+                        )),
+                  ] else ...[
+                    const SizedBox(height: 20),
+                    const Center(child: Text('No tasks for tomorrow')),
+                  ],
+
+                  const SizedBox(height: 80), // Extra space for FAB
                 ],
               ),
-
-              if (todayTasks.isNotEmpty) ...[
-                ...todayTasks.map((task) => TaskItem(
-                      task: task,
-                      isToday: true,
-                    )),
-              ] else ...[
-                const SizedBox(height: 20),
-                const Center(child: Text('No tasks for today')),
-              ],
-
-              const SizedBox(height: 32),
-
-              const Text(
-                'Tomorrow',
-                style: UiConstants.headerStyle,
-              ),
-
-              if (tomorrowTasks.isNotEmpty) ...[
-                ...tomorrowTasks.map((task) => TaskItem(
-                      task: task,
-                      isToday: false,
-                    )),
-              ] else ...[
-                const SizedBox(height: 20),
-                const Center(child: Text('No tasks for tomorrow')),
-              ],
-
-              const SizedBox(height: 80), // Extra space for FAB
+              if (state.status == TasksStatus.loading)
+                Container(
+                  color: Colors.white60,
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Center(child: PlatformCircularProgressIndicator()),
+                ),
             ],
           );
         },

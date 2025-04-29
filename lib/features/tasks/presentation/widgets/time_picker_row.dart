@@ -173,6 +173,9 @@ class TimePickerRow extends StatelessWidget {
                   onSelectedItemChanged: (int index) {
                     onHourChanged(index + 1);
                   },
+                  scrollController: FixedExtentScrollController(
+                    initialItem: hour - 1,
+                  ),
                   children: List<Widget>.generate(12, (int index) {
                     return Center(
                       child: Text(
@@ -181,9 +184,6 @@ class TimePickerRow extends StatelessWidget {
                       ),
                     );
                   }),
-                  scrollController: FixedExtentScrollController(
-                    initialItem: hour - 1,
-                  ),
                 ),
               ),
             ],
@@ -221,6 +221,9 @@ class TimePickerRow extends StatelessWidget {
                   onSelectedItemChanged: (int index) {
                     onMinuteChanged(index);
                   },
+                  scrollController: FixedExtentScrollController(
+                    initialItem: minute,
+                  ),
                   children: List<Widget>.generate(60, (int index) {
                     return Center(
                       child: Text(
@@ -229,9 +232,6 @@ class TimePickerRow extends StatelessWidget {
                       ),
                     );
                   }),
-                  scrollController: FixedExtentScrollController(
-                    initialItem: minute,
-                  ),
                 ),
               ),
             ],

@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:task_manager_app/features/auth/presentation/controllers/google_auth_controller.dart';
 import 'auth_state.dart';
-import '../../domain/models/user.dart';
+import '../../domain/user.dart';
 
 class AuthCubit extends Cubit<AuthState> {
   AuthCubit() : super(const AuthState());

@@ -1,8 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../../domain/models/profile.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import '../../domain/profile.dart';
 
-enum ProfileStatus { initial, loading, success, error }
+enum ProfileStatus { initial, loading, success, error, signedOut }
 
 class ProfileState {
   final Profile? profile;
@@ -90,7 +91,10 @@ class ProfileCubit extends Cubit<ProfileState> {
     emit(state.copyWith(status: ProfileStatus.loading));
     try {
       await FirebaseAuth.instance.signOut();
-      emit(const ProfileState());
+      await GoogleSignIn().signOut();
+      emit(const ProfileState(
+        status: ProfileStatus.signedOut,
+      ));
     } catch (e) {
       emit(state.copyWith(
         status: ProfileStatus.error,
