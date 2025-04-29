@@ -66,6 +66,9 @@ dependencies:
   # Local toast notification
   toastification: ^3.0.2
 
+  # App info and version
+  package_info_plus: ^8.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
