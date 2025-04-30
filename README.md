@@ -1,21 +1,23 @@
-<p align="left" style="display: flex; align-items: center; gap: 12px;">
-  <img src="./assets/playstore.png" alt="Play Store" width="48" style="vertical-align:middle; margin-right: 10px;"/>
-  <span style="font-size:2.2em; font-weight:bold; vertical-align:middle;">Task Manager App</span>
-</p>
+<!-- Header with icon and title, using a table for vertical centering -->
+<table>
+  <tr>
+    <td style="vertical-align: middle; width: 56px;">
+      <img src="assets/playstore.png" alt="Play Store" width="48"/>
+    </td>
+    <td style="vertical-align: middle;">
+      <h1 style="font-size:2.8em; font-weight:bold; margin:0;">Task Manager App</h1>
+    </td>
+  </tr>
+</table>
 
 A modern task management application built with Flutter that helps users organize their tasks efficiently. This app demonstrates best practices in mobile app development and provides a clean, intuitive user interface.
 
 <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; margin: 24px 0;">
-  <iframe 
-    width="320" 
-    height="568" 
-    src="https://www.youtube.com/embed/TaZNDAXS9r4" 
-    title="Task Manager App Demo" 
-    frameborder="0" 
-    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-    allowfullscreen
-    style="border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
-  </iframe>
+  <p align="left">
+    <a href="https://youtube.com/shorts/TaZNDAXS9r4?feature=share" target="_blank">
+      <img src="https://img.youtube.com/vi/TaZNDAXS9r4/hqdefault.jpg" alt="YouTube Demo Thumbnail" width="320"/>
+    </a>
+  </p>
 
   <a href="https://youtube.com/shorts/TaZNDAXS9r4?feature=share" target="_blank" style="text-decoration: none;">
     <img src="https://img.shields.io/badge/Watch Demo-YouTube-red?logo=youtube&style=for-the-badge" alt="YouTube Demo"/>
