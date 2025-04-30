@@ -1,14 +1,4 @@
-<!-- Header with icon and title, using a table for vertical centering -->
-<table>
-  <tr>
-    <td style="vertical-align: middle; width: 56px;">
-      <img src="assets/playstore.png" alt="Play Store" width="48"/>
-    </td>
-    <td style="vertical-align: middle;">
-      <h1 style="font-size:2.8em; font-weight:bold; margin:0;">Task Manager App</h1>
-    </td>
-  </tr>
-</table>
+# **Task Manager App**
 
 A modern task management application built with Flutter that helps users organize their tasks efficiently. This app demonstrates best practices in mobile app development and provides a clean, intuitive user interface.
 
